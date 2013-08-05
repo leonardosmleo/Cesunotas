@@ -365,9 +365,19 @@ function getExistingCredentialsView(){
 function loginAction(loginInfo){
 	var data = getDataFromDb(loginInfo.username);
 	Ti.API.debug(data);
+	
+	Ti.API.debug(data);
+	//return false;
+	var isOlder = true;
 	if( false !== data ){
-		return getNotesWindow(data);
+		var lasttime = new Date(lasttime).getTime();
+		var oneHour = 1000 * 60 * 60;
+		var isOlder = ((new Date().getTime() - oneHour) < lasttime) ? true: false;
 	} 
+	
+	if( !isOlder ){
+		return getNotesWindow(data.json);
+	}
 	else {
 		var url = 'http://squidtech.layoutz.com.br/cesunotas_wbs/webservice.php';
 	 	var client = Ti.Network.createHTTPClient({
@@ -382,7 +392,7 @@ function loginAction(loginInfo){
 		         			responseText: this.responseText
 		         		});
 		         
-		         //return getNotesWindow(this.responseText);
+		         return getNotesWindow(this.responseText);
 		     },
 		     // function called when an error occurs, including a timeout
 		     onerror : function(e) {
@@ -433,7 +443,7 @@ function getDataFromDb(ra){
 	var results = db.execute('SELECT * FROM data WHERE id = "'+ra+'"');
 	db.close();
 	if( results.isValidRow() ){
-		return results.fieldByName('json');
+		return {json: results.fieldByName('json'), lasttime: results.fieldByName('lasttime'),};
 	}
 	return false;
 }
