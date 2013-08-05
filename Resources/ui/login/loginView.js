@@ -321,18 +321,20 @@ function getLoginBtn()
 		    font: {fontFamily:'Tahoma',fontWeight:'bold',fontSize:'20dp'},
 		    borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		    borderColor: '#2292CE',
-		    borderWidth: 3
+		    //borderWidth: 3
 	}); 
 	
 	loginBtn.addEventListener('touchstart', function(){
 		var matrix = Ti.UI.create2DMatrix()
 	  	//matrix = matrix.rotate(180);
-	  	matrix = matrix.scale(-.8, -.8);
+	  	matrix = matrix.scale(.9, .9);
 		var animation = Ti.UI.createAnimation({
 			transform : matrix,
-		    duration : 500,
+		    duration : 200,
 		    autoreverse : true,
-		    repeat : 1
+		    repeat : 1,
+		    backgroundColor: '#025F8B'
+		    
 		});
 		//loginBtn.backgroundColor = '#025F8B';
 		//loginBtn.color = '#fff';

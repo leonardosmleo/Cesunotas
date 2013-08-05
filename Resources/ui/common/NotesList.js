@@ -337,7 +337,7 @@ function openPeriodViewByDiciplinIndex(index)
 		
 
 		click_active = false;
-		win.open({animated:true});
+		win.open({animated:true, left: 0});
 		
 	}
 	//return false;
@@ -352,7 +352,8 @@ function getNewWindowForPeriods(index,list){
 				navBarHidden:true,
 				exitOnClose: false,
 				modal: true,
-				bubbleParent: false
+				bubbleParent: false,
+				left: Ti.Platform.displayCaps.platformWidth
 				//left: Ti.Platform.displayCaps.platformWidth
 		});
 	win.addEventListener('androidback',function(e){
