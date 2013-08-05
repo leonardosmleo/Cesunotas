@@ -105,7 +105,7 @@ function getFooterTemplate(){
 }
 
 function installDb(){
-	if( !isDbInstalled() ){
+	//if( !isDbInstalled() ){
 		var file = Ti.Filesystem.getFile(Titanium.Filesystem.resourcesDirectory, 'squidtech.sqlite');
 		if(file.exists()) {
 			var db = Ti.Database.install('squidtech.sqlite', 'squidtech.sqlite');
@@ -116,7 +116,7 @@ function installDb(){
 			Ti.API.error('db not installed, file not found.');
 			return false;
 		}
-	}
+	//}
 	return true;
 }
 function isDbInstalled(){

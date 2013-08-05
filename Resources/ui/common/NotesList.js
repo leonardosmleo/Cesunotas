@@ -5,6 +5,7 @@
 var diciplinsWindows;
 var currentWindow = -1;
 var user = false;
+var disciplins_names = [];
 function NotesList(notes)
 {
 	//Ti.API.debug(JSON.stringify(notes));
@@ -122,7 +123,9 @@ function prepareListView( notes )
 				text: abreviateName(name), 
 			} 
 		} );
-
+		
+		disciplins_names.push( abreviateName(name) );
+		
 		var nos = extractNotes(notes[disciplin]);
 		nots.push(nos.notes);
 		difs.push(nos.difs);
@@ -319,7 +322,7 @@ function openPeriodViewByDiciplinIndex(index)
 		}
 		//Ti.API.debug( JSON.stringify(items) );
 
-		var header = new getHeaderLayout( user );
+		var header = new getHeaderLayout( user, 'Disciplinas / '+disciplins_names[index] );
 		var footer = new getPeriodsFooter( total, avg );
 		//return false;
 	

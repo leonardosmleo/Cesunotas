@@ -39,6 +39,39 @@ function LoginView()
 
 	loginWindow.add( activityIndicator );
 	
+	var activity = loginWindow.activity;
+
+	activity.onCreateOptionsMenu = function(e){
+	  var menu = e.menu;
+	  var menuItem = menu.add({ 
+	    title: "remover credênciais", 
+	    icon:  "/icons/light/light_x.png",
+	    showAsAction: Ti.Android.SHOW_AS_ACTION_IF_ROOM
+	  });
+	  
+	  var alert = Ti.UI.createAlertDialog({ title: 'Limpar', message: 'Remover credênciais do sistema ?', buttonNames: ['Yes', 'No'], cancel: 1 });
+	  
+	  menuItem.addEventListener("click", function(e) {	
+		  alert.show();
+	  });
+	
+	  alert.addEventListener("click", function(e){
+	      //Clicked cancel, first check is for iphone, second for android
+		  if (e.cancel === e.index || e.cancel === true) { return false; }
+		  //now you can use parameter e to switch/case
+		  switch (e.index) {
+		      case 0: deleteUserCredentials();
+		      break;
+		      //This will never be reached, if you specified cancel for index 1
+		  case 1: return false;
+		      break;
+		  default:
+		      	return false
+		      break;
+		  }
+	  });
+	}	
+	
 	loginWindow.open();
 	
 	return loginWindow;
@@ -349,7 +382,7 @@ function loginAction(loginInfo){
 		         			responseText: this.responseText
 		         		});
 		         
-		         return getNotesWindow(this.responseText);
+		         //return getNotesWindow(this.responseText);
 		     },
 		     // function called when an error occurs, including a timeout
 		     onerror : function(e) {
@@ -425,6 +458,8 @@ function deleteUserCredentials(){
 	var db = Ti.Database.open('squidtech.sqlite');
 	var results = db.execute('DELETE FROM credentials WHERE 1 = 1');
 	db.close();
+	deleteDataInDb();
+	
 	return true;
 }
 
