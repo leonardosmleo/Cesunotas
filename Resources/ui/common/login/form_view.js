@@ -1,3 +1,6 @@
+/* Include global variables  */
+Ti.include('/ui/models/login.js');
+
 /**
  * @author jmilanes
  */
@@ -11,7 +14,7 @@ function LoginView()
 		tabBarHidden:true,
 		navBarHidden:true,
 		exitOnClose: true,
-		backgroundColor: '#fff'
+		backgroundColor: Template.login_window.backgroundColor
 	});
 
 	var scrollView = Ti.UI.createScrollView({
@@ -87,8 +90,8 @@ function getLoginWindowLabel()
 	
 	var logo = Ti.UI.createImageView({
 		image: '/images/logo.png',
-		height: 40,
-		left: 15,
+		height: '30dp',
+		left: '10dp',
 		top: 20
 	});
 	
@@ -103,7 +106,7 @@ function getLoginDescriptionLabel()
 	    top: 81,
 	    left: 0,
 	    backgroundColor: '#fff',
-	    width: Titanium.UI.SIZE, height: 100
+	    width: Titanium.UI.SIZE, height: '70dp',
 	});
 	
 	if( userExists ){
@@ -117,7 +120,7 @@ function getLoginDescriptionLabel()
 		 image: image,
 		 left: 20,
 		 top: 20,
-		 width: 45, height: 45
+		 width: '35dp', height: '30dp'
 	});
 	
 	labelDescriptionContainer.add(loginDescriptionIcon);
@@ -138,7 +141,7 @@ function getLoginDescriptionLabel()
 	    text: description,
 	    textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
 	    top: 20,
-	    left: 80,
+	    left: '60dp',
 	    width: Titanium.UI.SIZE, height: 60,
 	    font: { fontSize:'14dp' },
 	});
@@ -155,6 +158,7 @@ function getLoginForm(){
 	    left: 0,
 	    width: Titanium.UI.SIZE, height: 450
 	});
+	
 	var username = getRaInput();
 	var password = getPasswordInput();
 	var checkbox = getCheckboxInput();
@@ -357,7 +361,7 @@ function getDeleteBtn()
 		    top:250, 
 		    left:'5%',  
 	    	width: '90%',   
-		    height:80,  
+		    height: 80,  
 		    borderRadius:1, 
 		    backgroundColor: '#8F1111',
 		    color: '#fff',
@@ -427,7 +431,7 @@ function loginAction(loginInfo){
 function getNotesWindow(notes)
 {
 	//Ti.API.info(notes);
-	var NotesList = require('/ui/common/NotesList');
+	var NotesList = require('/ui/common/disciplines/list_view');
 	/*var currentWin = Ti.UI.currentWindow;
 	if( currentWin !== null ){
 		currentWin.close();
@@ -436,57 +440,6 @@ function getNotesWindow(notes)
 	//return true;	
 }
 
-function updateUserCredentilas(loginInfo){
-	var db = Ti.Database.open('squidtech.sqlite');
-	Ti.API.debug(db);
-	var results = db.execute('REPLACE INTO credentials ( ra, password ) VALUES("'+loginInfo.username+'","'+loginInfo.password+'")');
-	db.close();
-	return results;
-}
 
-function getStoredUserCredentioals(ra){
-	var db = Ti.Database.open('squidtech.sqlite');
-	var results = db.execute('SELECT * FROM credentials WHERE ra = "'+ra+'"');
-	db.close();
-	if( results.isValidRow() ){
-		return results;
-	}
-	return false;	
-}
-
-function getDataFromDb(ra){
-	var db = Ti.Database.open('squidtech.sqlite');
-	var results = db.execute('SELECT * FROM data WHERE id = "'+ra+'"');
-	db.close();
-	if( results.isValidRow() ){
-		return {json: results.fieldByName('json'), lasttime: results.fieldByName('lasttime'),};
-	}
-	return false;
-}
-
-function updateDataInDb(data){
-	var db = Ti.Database.open('squidtech.sqlite');	
-	var lasttime = new Date();
-	value = data.responseText;
-	var results = db.execute("REPLACE INTO data ( id, json, lasttime ) VALUES('"+data.user+"','"+value.toString()+"', '"+lasttime.toString("yyyy/mm/dd HH:MM:ss")+"')");
-	db.close();
-	return results;
-}
-
-function deleteDataInDb(){
-	var db = Ti.Database.open('squidtech.sqlite');
-	var results = db.execute('DELETE FROM data WHERE 1 = 1');
-	db.close();
-	return true;
-}
-
-function deleteUserCredentials(){
-	var db = Ti.Database.open('squidtech.sqlite');
-	var results = db.execute('DELETE FROM credentials WHERE 1 = 1');
-	db.close();
-	deleteDataInDb();
-	
-	return true;
-}
 
 module.exports = LoginView;
