@@ -325,10 +325,24 @@ function getLoginBtn()
 	}); 
 	
 	loginBtn.addEventListener('touchstart', function(){
-		loginBtn.backgroundColor = '#025F8B';
-		loginBtn.color = '#fff';
-		loginBtn.borderColor = '#2292CE';
+		var matrix = Ti.UI.create2DMatrix()
+	  	//matrix = matrix.rotate(180);
+	  	matrix = matrix.scale(-.8, -.8);
+		var animation = Ti.UI.createAnimation({
+			transform : matrix,
+		    duration : 500,
+		    autoreverse : true,
+		    repeat : 1
+		});
+		//loginBtn.backgroundColor = '#025F8B';
+		//loginBtn.color = '#fff';
+		//loginBtn.borderColor = '#2292CE';
+		loginBtn.animate(animation);
 	});
+
+	
+  	
+	
 
 	return loginBtn;
 	
