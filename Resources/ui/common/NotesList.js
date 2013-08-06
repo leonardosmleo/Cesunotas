@@ -219,6 +219,9 @@ function extractNotes(notes){
 		
 		if( i > 0 ){
 			if( note > 0 ){
+				
+				Ti.API.debug(notes[( i - 1 )]);
+				
 				var previus = parseFloat( notes[( i - 1 )].replace(',','.') );
 				difs[i] = new Number( Math.abs( note - previus ) );
 				difs[i] = difs[i].toFixed(1);

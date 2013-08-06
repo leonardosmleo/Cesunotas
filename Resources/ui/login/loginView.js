@@ -87,7 +87,7 @@ function getLoginWindowLabel()
 	
 	var logo = Ti.UI.createImageView({
 		image: '/images/logo.png',
-		height: 40,
+		height: '50dp',
 		left: 15,
 		top: 20
 	});
@@ -100,10 +100,10 @@ function getLoginWindowLabel()
 function getLoginDescriptionLabel()
 {
 	var labelDescriptionContainer = Ti.UI.createView({
-	    top: 81,
+	    top: '60dp',
 	    left: 0,
 	    backgroundColor: '#fff',
-	    width: Titanium.UI.SIZE, height: 100
+	    width: Titanium.UI.SIZE, height: '60dp'
 	});
 	
 	if( userExists ){
@@ -139,7 +139,7 @@ function getLoginDescriptionLabel()
 	    textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
 	    top: 20,
 	    left: 80,
-	    width: Titanium.UI.SIZE, height: 60,
+	    width: Titanium.UI.SIZE, height: '50dp',
 	    font: { fontSize:'14dp' },
 	});
 	
@@ -151,9 +151,9 @@ function getLoginDescriptionLabel()
 function getLoginForm(){
 	
 	var formContainerView = Ti.UI.createView({
-		top: 181,
+		top: '110dp',
 	    left: 0,
-	    width: Titanium.UI.SIZE, height: 450
+	    width: Titanium.UI.SIZE, height: '100%'
 	});
 	var username = getRaInput();
 	var password = getPasswordInput();
@@ -212,10 +212,10 @@ function getRaInput()
 {
 	var username = Ti.UI.createTextField({  
 	    color:'#fff',  
-	    top:30,  
+	    top:'30dp',  
 	    left:'5%',  
 	    width: '90%',  
-	    height:80,  
+	    height:'50dp',  
 	    hintText:'RA',
 	    value: '11036102',
 	    backgroundColor: "#025F8B",
@@ -246,10 +246,10 @@ function getPasswordInput()
 {
 	var password = Ti.UI.createTextField({  
 	    color:'#fff',  
-	    top:130,  
+	    top: '90dp',  
 	    left:'5%',  
 	    width: '90%', 
-	    height:80,  
+	    height:'50dp',  
 	    hintText:'Senha',
 		value:  'senha1',
 	    passwordMask:true,  
@@ -278,26 +278,19 @@ function getPasswordInput()
 	
 }
 
-function getCheckboxInput(){
-	
-	/* var checkboxContainer = Ti.UI.createView({
-	    
-	    width: width, height: 80
-	}); */
-	
+function getCheckboxInput()
+{
 	var checkbox = Ti.UI.createSwitch({
 		style : Ti.UI.Android.SWITCH_STYLE_CHECKBOX,
 	    title : 'Salvar credenciais ?',
 	    value : false,
-	    top : 230,
-	    height : 50,
+	    top : '140dp',
+	    height : '50dp',
 	    left:'5%',  
 	    width: '90%', 
 	    color: '#333'
 	});
-	
-	//checkboxContainer.add(checkbox);
-	
+
 	return checkbox;
 }
 
@@ -311,10 +304,10 @@ function getLoginBtn()
 	
 	var loginBtn = Ti.UI.createButton({  
 		    title: text,  
-		    top:300, 
+		    top:'200dp', 
 		    left:'5%',  
 	    	width: '90%',   
-		    height:80,  
+		    height:'50dp',  
 		    borderRadius:1, 
 		    backgroundColor: '#2292CE',
 		    color: '#fff',
