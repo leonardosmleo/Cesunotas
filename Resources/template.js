@@ -1,5 +1,4 @@
 var template = {
-	
 	login_window: {
 		backgroundColor: '#fff',
 		scroll_view: {
@@ -7,7 +6,6 @@ var template = {
 		    top: 0, bottom: 50,
 		    left: 0, right: 0
 		}  
-			
 	},
 	login_form: {
 		

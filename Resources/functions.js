@@ -13,9 +13,9 @@ function isOs( osname ){
  * Database functions 
  */
 function installDb(){
-	var file = getFile( appConfig.db.file );
+	var file = getFile( config.db.file );
 	if(file.exists()) {
-		var db = Ti.Database.install( appConfig.db.file, appConfig.db.file);
+		var db = Ti.Database.install( config.db.file, config.db.file);
 		db.close();
 		//Ti.API.info('file exists');
 		return true;
@@ -28,8 +28,31 @@ function installDb(){
 
 function isDbInstalled(){
 	var fname = Ti.Filesystem.getFile(
-					"file://data/data/"+ Ti.App.getId()+"/databases/"+appConfig.db.file);
+					"file://data/data/"+ Ti.App.getId()+"/databases/"+config.db.file);
 	return ( ( fname.size > 0 )? true : false );
+}
+
+function updateUserCredentilas(loginInfo){
+	var db = Ti.Database.open('squidtech.sqlite');
+	Ti.API.debug(db);
+	var results = db.execute('REPLACE INTO credentials ( ra, password ) VALUES("'+loginInfo.username+'","'+loginInfo.password+'")');
+	db.close();
+	return results;
+}
+
+function getStoredUserCredentioals(ra){
+	var db = Ti.Database.open('squidtech.sqlite');
+	var results = db.execute('SELECT * FROM credentials WHERE ra = "'+ra+'"');
+	db.close();
+	if( results.isValidRow() ){
+		return results;
+	}
+	return false;	
+}
+
+function userExists(){
+	var user = getStoredUserCredentioals( this.ra );
+	return ( user.rowCount > 0 )? true : false;
 }
 
 /*******************************************************************************************

@@ -40,3 +40,6 @@ function getLoginWindow()
 	return new loginView();
 }
 
+function getTemplate(){
+	
+}

@@ -1,3 +1,4 @@
+
 /* Include global variables  */
 Ti.include('/ui/models/login.js');
 
@@ -14,7 +15,7 @@ function LoginView()
 		tabBarHidden:true,
 		navBarHidden:true,
 		exitOnClose: true,
-		backgroundColor: Template.login_window.backgroundColor
+		backgroundColor: template.login_window.backgroundColor
 	});
 
 	var scrollView = Ti.UI.createScrollView({
@@ -32,48 +33,20 @@ function LoginView()
 	scrollView.addEventListener('postlayout', function(){
 		scrollView.height = Ti.Platform.displayCaps.platformHeight - 50;
 	});
-
-	scrollView.add( getLoginWindowLabel() );
-	scrollView.add( getLoginForm() );
-	scrollView.add( getLoginDescriptionLabel() );
-	loginWindow.add(scrollView);
-	loginWindow.add( getFooterTemplate() );
 	
+	var LoginForm = require('forms/login');
+
+	//scrollView.add( getLoginWindowLabel() );
+	var form = LoginForm();
+	scrollView.add( form );
+	//scrollView.add( getLoginDescriptionLabel() );
+	loginWindow.add(scrollView);
+	//loginWindow.add( getFooterTemplate() );
+	
+	addToLoginUserMenu();
 
 	loginWindow.add( activityIndicator );
-	
-	var activity = loginWindow.activity;
 
-	activity.onCreateOptionsMenu = function(e){
-	  var menu = e.menu;
-	  var menuItem = menu.add({ 
-	    title: "remover credênciais", 
-	    icon:  "/icons/light/light_x.png",
-	    showAsAction: Ti.Android.SHOW_AS_ACTION_IF_ROOM
-	  });
-	  
-	  var alert = Ti.UI.createAlertDialog({ title: 'Limpar', message: 'Remover credênciais do sistema ?', buttonNames: ['Yes', 'No'], cancel: 1 });
-	  
-	  menuItem.addEventListener("click", function(e) {	
-		  alert.show();
-	  });
-	
-	  alert.addEventListener("click", function(e){
-	      //Clicked cancel, first check is for iphone, second for android
-		  if (e.cancel === e.index || e.cancel === true) { return false; }
-		  //now you can use parameter e to switch/case
-		  switch (e.index) {
-		      case 0: deleteUserCredentials();
-		      break;
-		      //This will never be reached, if you specified cancel for index 1
-		  case 1: return false;
-		      break;
-		  default:
-		      	return false
-		      break;
-		  }
-	  });
-	}	
 	
 	loginWindow.open();
 	
@@ -151,6 +124,43 @@ function getLoginDescriptionLabel()
 	return labelDescriptionContainer;
 }
 
+
+function addToLoginUserMenu()
+{	
+	var activity = loginWindow.activity;
+	
+	activity.onCreateOptionsMenu = function(e){
+	  var menu = e.menu;
+	  var menuItem = menu.add({ 
+	    title: "remover credênciais", 
+	    icon:  "/icons/light/light_x.png",
+	    showAsAction: Ti.Android.SHOW_AS_ACTION_IF_ROOM
+	  });
+	  
+	  var alert = Ti.UI.createAlertDialog({ title: 'Limpar', message: 'Remover credênciais do sistema ?', buttonNames: ['Yes', 'No'], cancel: 1 });
+	  
+	  menuItem.addEventListener("click", function(e) {	
+		  alert.show();
+	  });
+	
+	  alert.addEventListener("click", function(e){
+	      //Clicked cancel, first check is for iphone, second for android
+		  if (e.cancel === e.index || e.cancel === true) { return false; }
+		  //now you can use parameter e to switch/case
+		  switch (e.index) {
+		      case 0: deleteUserCredentials();
+		      break;
+		      //This will never be reached, if you specified cancel for index 1
+		  case 1: return false;
+		      break;
+		  default:
+		      	return false
+		      break;
+		  }
+	  });
+	}	
+}
+/*
 function getLoginForm(){
 	
 	var formContainerView = Ti.UI.createView({
@@ -195,251 +205,6 @@ function getLoginForm(){
 
 	return formContainerView;  
 }
-
-function getLoginWindowActionLabel()
-{
-	var actionLabel = Ti.UI.createLabel({
-	    color: '#fff',
-	    shadowColor: '#aaa',
-	    shadowOffset: {x:5, y:5},
-	    text: 'Entre com suas credenciais da àrea do aluno para ver suas notas.',
-	    textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
-	    top: 0,
-	    width: width, height: 80,
-	    font: { fontSize:'20dp',fontWeight:'bold' },
-	});
-	
-	return actionLabel;
-}
-
-function getRaInput()
-{
-	var username = Ti.UI.createTextField({  
-	    color:'#fff',  
-	    top:30,  
-	    left:'5%',  
-	    width: '90%',  
-	    height:80,  
-	    hintText:'RA',
-	    value: '11036102',
-	    backgroundColor: "#025F8B",
-	    keyboardType:	Ti.UI.KEYBOARD_DEFAULT,  
-	    returnKeyType:	Ti.UI.RETURNKEY_DEFAULT,  
-	    borderStyle:	Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-	    borderColor: '#025F8B',
-	    borderWidth: 3,
-	    font: { fontSize: '20dp' }
-	}); 
-
-	username.addEventListener('focus', function(){
-		username.backgroundColor = '#fff';
-		username.color = '#333';
-		username.borderColor = '#025F8B'
-	});
-	
-	username.addEventListener('blur', function(){
-		username.backgroundColor = '#025F8B';
-		username.color = '#fff';
-		username.borderColor = '#025F8B'
-	});
-	
-	return username;	
-}
-
-function getPasswordInput()
-{
-	var password = Ti.UI.createTextField({  
-	    color:'#fff',  
-	    top:130,  
-	    left:'5%',  
-	    width: '90%', 
-	    height:80,  
-	    hintText:'Senha',
-		value:  'senha1',
-	    passwordMask:true,  
-	    backgroundColor: "#025F8B",
-	    keyboardType:	Ti.UI.KEYBOARD_DEFAULT,  
-	    returnKeyType:	Ti.UI.RETURNKEY_DEFAULT,  
-	    borderStyle:	Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-	    borderColor: '#025F8B',
-	    borderWidth: 3,
-	    font: { fontSize: '20dp' }
-	}); 
-	
-	password.addEventListener('focus', function(){
-		password.backgroundColor = '#fff';
-		password.color = '#333';
-		password.borderColor = '#025F8B'
-	});
-	
-	password.addEventListener('blur', function(){
-		password.backgroundColor = '#025F8B';
-		password.color = '#fff';
-		password.borderColor = '#025F8B'
-	});
-	
-	return password;
-	
-}
-
-function getCheckboxInput(){
-	
-	/* var checkboxContainer = Ti.UI.createView({
-	    
-	    width: width, height: 80
-	}); */
-	
-	var checkbox = Ti.UI.createSwitch({
-		style : Ti.UI.Android.SWITCH_STYLE_CHECKBOX,
-	    title : 'Salvar credenciais ?',
-	    value : false,
-	    top : 230,
-	    height : 50,
-	    left:'5%',  
-	    width: '90%', 
-	    color: '#333'
-	});
-	
-	//checkboxContainer.add(checkbox);
-	
-	return checkbox;
-}
-
-function getLoginBtn()
-{
-	if( userExists ){
-		var text = 'Ver notas';
-	} else {
-		var text = 'Enviar';
-	}
-	
-	var loginBtn = Ti.UI.createButton({  
-		    title: text,  
-		    top:300, 
-		    left:'5%',  
-	    	width: '90%',   
-		    height:80,  
-		    borderRadius:1, 
-		    backgroundColor: '#2292CE',
-		    color: '#fff',
-		    font: {fontFamily:'Tahoma',fontWeight:'bold',fontSize:'20dp'},
-		    borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-		    borderColor: '#2292CE',
-		    //borderWidth: 3
-	}); 
-	
-	loginBtn.addEventListener('touchstart', function(){
-		var matrix = Ti.UI.create2DMatrix()
-	  	//matrix = matrix.rotate(180);
-	  	matrix = matrix.scale(.9, .9);
-		var animation = Ti.UI.createAnimation({
-			transform : matrix,
-		    duration : 200,
-		    autoreverse : true,
-		    repeat : 1,
-		    backgroundColor: '#025F8B'
-		    
-		});
-		//loginBtn.backgroundColor = '#025F8B';
-		//loginBtn.color = '#fff';
-		//loginBtn.borderColor = '#2292CE';
-		loginBtn.animate(animation);
-	});
-
-	
-  	
-	
-
-	return loginBtn;
-	
-}
-
-function getDeleteBtn()
-{
-	var deleteBtn = Ti.UI.createButton({  
-		    title:'remover credenciais',  
-		    top:250, 
-		    left:'5%',  
-	    	width: '90%',   
-		    height: 80,  
-		    borderRadius:1, 
-		    backgroundColor: '#8F1111',
-		    color: '#fff',
-		    font: {fontFamily:'Tahoma',fontWeight:'bold',fontSize:'20dp'},
-		    borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-		    borderColor: '#8F1111',
-		    borderWidth: 3
-	}); 
-	
-	deleteBtn.addEventListener('click', function(){
-		deleteUserCredentials();
-	});
-
-	return deleteBtn;	
-}
-
-function getExistingCredentialsView(){
-
-}
-
-function loginAction(loginInfo){
-	var data = getDataFromDb(loginInfo.username);
-	Ti.API.debug(data);
-	
-	Ti.API.debug(data);
-	//return false;
-	var isOlder = true;
-	if( false !== data ){
-		var lasttime = new Date(lasttime).getTime();
-		var oneHour = 1000 * 60 * 60;
-		var isOlder = ((new Date().getTime() - oneHour) < lasttime) ? true: false;
-	} 
-	
-	if( !isOlder ){
-		return getNotesWindow(data.json);
-	}
-	else {
-		var url = 'http://squidtech.layoutz.com.br/cesunotas_wbs/webservice.php';
-	 	var client = Ti.Network.createHTTPClient({
-		     // function called when the response data is available
-		     onload : function(e) {
-		         Ti.API.debug(loginInfo.keep);
-		         if( loginInfo.keep ){
-		         	updateUserCredentilas(loginInfo);
-		         }	         
-		         updateDataInDb({
-		         			user: loginInfo.username,
-		         			responseText: this.responseText
-		         		});
-		         
-		         return getNotesWindow(this.responseText);
-		     },
-		     // function called when an error occurs, including a timeout
-		     onerror : function(e) {
-		         //Ti.API.debug(e.error);
-		         return false;
-		     },
-		     timeout : 5000  // in milliseconds
-		 });
-		 // Prepare the connection.
-		 client.open("POST", url);
-		 // Send the request.
-		 client.send(loginInfo);
-	}
-}
-
-function getNotesWindow(notes)
-{
-	//Ti.API.info(notes);
-	var NotesList = require('/ui/common/disciplines/list_view');
-	/*var currentWin = Ti.UI.currentWindow;
-	if( currentWin !== null ){
-		currentWin.close();
-	}*/
-	return new NotesList( notes );
-	//return true;	
-}
-
-
+*/
 
 module.exports = LoginView;

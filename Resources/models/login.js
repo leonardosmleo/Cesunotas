@@ -1,20 +1,4 @@
-function updateUserCredentilas(loginInfo){
-	var db = Ti.Database.open('squidtech.sqlite');
-	Ti.API.debug(db);
-	var results = db.execute('REPLACE INTO credentials ( ra, password ) VALUES("'+loginInfo.username+'","'+loginInfo.password+'")');
-	db.close();
-	return results;
-}
 
-function getStoredUserCredentioals(ra){
-	var db = Ti.Database.open('squidtech.sqlite');
-	var results = db.execute('SELECT * FROM credentials WHERE ra = "'+ra+'"');
-	db.close();
-	if( results.isValidRow() ){
-		return results;
-	}
-	return false;	
-}
 
 function getDataFromDb(ra){
 	var db = Ti.Database.open('squidtech.sqlite');
