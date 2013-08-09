@@ -1,7 +1,7 @@
 
 /* Include global variables  */
-Ti.include('/ui/models/login.js');
-
+Ti.include('/models/login.js');
+Ti.include('/ui/templates/login.js');
 /**
  * @author jmilanes
  */
@@ -15,7 +15,7 @@ function LoginView()
 		tabBarHidden:true,
 		navBarHidden:true,
 		exitOnClose: true,
-		backgroundColor: template.login_window.backgroundColor
+		backgroundColor: template.window.background_color
 	});
 
 	var scrollView = Ti.UI.createScrollView({
@@ -34,19 +34,26 @@ function LoginView()
 		scrollView.height = Ti.Platform.displayCaps.platformHeight - 50;
 	});
 	
-	var LoginForm = require('forms/login');
-
-	//scrollView.add( getLoginWindowLabel() );
-	var form = LoginForm();
-	scrollView.add( form );
-	//scrollView.add( getLoginDescriptionLabel() );
-	loginWindow.add(scrollView);
-	//loginWindow.add( getFooterTemplate() );
+	var form = require('forms/login');
+	scrollView.add( getLoginWindowLabel() );
+	var LoginForm = new form.LoginForm(template);
 	
-	addToLoginUserMenu();
-
+	scrollView.add( LoginForm.getForm() );
+	scrollView.add( getLoginDescriptionLabel() );
+	loginWindow.add(scrollView);
+	loginWindow.add( getFooterTemplate() );
+	
+	Ti.include('/ui/common/login/android_menu.js');
+	android_menu.add(login_android_menu);
+	
+	//Ti.API.debug(var_dump(android_menu));
+	
+	var activityIndicator = getActivityIndicator();
 	loginWindow.add( activityIndicator );
-
+	
+	android_menu.render( loginWindow.activity );
+	
+	//Ti.API.debug(config);
 	
 	loginWindow.open();
 	
@@ -87,8 +94,7 @@ function getLoginDescriptionLabel()
 	} else {
 		var image = '/icons/dark_2x/dark_key@2x.png';	
 	}
-	
-	
+
 	var loginDescriptionIcon = Ti.UI.createImageView({
 		 image: image,
 		 left: 20,
@@ -125,41 +131,7 @@ function getLoginDescriptionLabel()
 }
 
 
-function addToLoginUserMenu()
-{	
-	var activity = loginWindow.activity;
-	
-	activity.onCreateOptionsMenu = function(e){
-	  var menu = e.menu;
-	  var menuItem = menu.add({ 
-	    title: "remover credênciais", 
-	    icon:  "/icons/light/light_x.png",
-	    showAsAction: Ti.Android.SHOW_AS_ACTION_IF_ROOM
-	  });
-	  
-	  var alert = Ti.UI.createAlertDialog({ title: 'Limpar', message: 'Remover credênciais do sistema ?', buttonNames: ['Yes', 'No'], cancel: 1 });
-	  
-	  menuItem.addEventListener("click", function(e) {	
-		  alert.show();
-	  });
-	
-	  alert.addEventListener("click", function(e){
-	      //Clicked cancel, first check is for iphone, second for android
-		  if (e.cancel === e.index || e.cancel === true) { return false; }
-		  //now you can use parameter e to switch/case
-		  switch (e.index) {
-		      case 0: deleteUserCredentials();
-		      break;
-		      //This will never be reached, if you specified cancel for index 1
-		  case 1: return false;
-		      break;
-		  default:
-		      	return false
-		      break;
-		  }
-	  });
-	}	
-}
+
 /*
 function getLoginForm(){
 	

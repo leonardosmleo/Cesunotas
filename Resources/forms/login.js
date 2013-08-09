@@ -1,4 +1,4 @@
-var loginForm = (function(){
+function LoginForm(template){
 
 	this.label;
 	this.ra;
@@ -7,35 +7,40 @@ var loginForm = (function(){
 	this.btn;
 	this.user_exists;
 	this.form;
-	
+
 	var self = this;
 	
 	this._init = function(){
-		
+
 		self.getLoginActionLabel();
 		self.getRaInput();
 		self.getPasswordInput();
 		self.getCheckboxInput();
 		self.getSubmitButton();
 		
-		self.user_exists = userExists();
-	
-		if( userExists ){
-			self.ra.value = user.fieldByName('ra');
-			self.password.value = user.fieldByName('password');
+		self.user_exists = userExists(self.ra);
+		
+		Ti.API.debug((true !== self.user_exists)+' estamos aqui');
+		
+		if( false !== self.user_exists ){
+			self.ra.value = self.user_exists.fieldByName('ra');
+			self.password.value = self.user_exists.fieldByName('password');
 		}
+		
+		var activityIndicator = getActivityIndicator();
 	
 		self.btn.addEventListener('touchend', function(){
-			activityIndicator.show();
+			//activityIndicator.show();
 			loginAction({username: username.value, password: password.value, keep: checkbox.value });
 		});
-
+		
+		return self;
 	}
 	
 	
 	this.getForm = function()
 	{
-		return render();
+		return self.render();
 	}
 	
 	this.render = function(){
@@ -44,17 +49,14 @@ var loginForm = (function(){
 		    left: 0,
 		    width: Titanium.UI.SIZE, height: 450
 		});
-		if( !userExists ){
-			formView.add( this.ra );
-			formView.add( this.password ); 
-			formView.add( this.checkbox );
+		if( !self.userExists ){
+			formView.add( self.ra );
+			formView.add( self.password ); 
+			formView.add( self.keep );
 		} else {
-			loginBtn.top = '50dp';
-			if( debug ){
-				formView.add( getDeleteBtn() );
-			}
+			self.btn.top = '50dp';
 		}
-		formView.add( loginBtn );
+		formView.add( self.btn );
 	
 		return formView;
 	}
@@ -62,14 +64,14 @@ var loginForm = (function(){
 	this.getLoginActionLabel = function()
 	{
 		self.label = Ti.UI.createLabel({
-		    color: '#fff',
-		    shadowColor: '#aaa',
-		    shadowOffset: {x:5, y:5},
+		    color: template.form.label.color,
+		    shadowColor: template.form.label.shadowColor,
+		    shadowOffset: {x: template.form.label.shadowOffset.x, y: template.form.label.shadowOffset.y},
 		    text: 'Entre com suas credenciais da àrea do aluno para ver suas notas.',
-		    textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
-		    top: 0,
-		    width: width, height: 80,
-		    font: { fontSize:'20dp',fontWeight:'bold' },
+		    textAlign: template.form.label.text_align,
+		    top: template.form.label.top,
+		    width: Titanium.UI.SIZE, height: template.form.label.height,
+		    font: { fontSize: template.form.label.font_size, fontWeight: template.form.label.font_weigth },
 		});
 		return self.label;
 	}
@@ -80,30 +82,31 @@ var loginForm = (function(){
 		    color:'#fff',  
 		    top:30,  
 		    left:'5%',  
-		    width: '90%',  
-		    height:80,  
+		    width: template.form.input.width,  
+		    height: template.form.input.height,  
 		    hintText:'RA',
 		    value: '11036102',
-		    backgroundColor: "#025F8B",
+		    backgroundColor: template.form.input.background_color,
 		    keyboardType:	Ti.UI.KEYBOARD_DEFAULT,  
 		    returnKeyType:	Ti.UI.RETURNKEY_DEFAULT,  
 		    borderStyle:	Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-		    borderColor: '#025F8B',
-		    borderWidth: 3,
-		    font: { fontSize: '20dp' }
+		    borderColor: template.form.input.border_color,
+		    borderWidth: template.form.input.border_width,
+		    font: { fontSize: template.form.input.font_size, fontWeight: template.form.input.font_weigth },
 		}); 
 	
 		self.ra.addEventListener('focus', function(){
-			username.backgroundColor = '#fff';
-			username.color = '#333';
-			username.borderColor = '#025F8B'
+			self.ra.backgroundColor = '#fff';
+			self.ra.color = '#333';
+			self.ra.borderColor = '#025F8B'
 		});
 		
 		self.ra.addEventListener('blur', function(){
-			username.backgroundColor = '#025F8B';
-			username.color = '#fff';
-			username.borderColor = '#025F8B'
+			self.ra.backgroundColor = '#025F8B';
+			self.ra.color = '#fff';
+			self.ra.borderColor = '#025F8B'
 		});
+		
 		return self.ra;	
 	}
 	
@@ -113,30 +116,30 @@ var loginForm = (function(){
 		    color:'#fff',  
 		    top:130,  
 		    left:'5%',  
-		    width: '90%', 
-		    height:80,  
+		    width: template.form.input.width, 
+		    height: template.form.input.height,  
 		    hintText:'Senha',
 			value:  'senha1',
 		    passwordMask:true,  
-		    backgroundColor: "#025F8B",
+		    backgroundColor: template.form.input.background_color,
 		    keyboardType:	Ti.UI.KEYBOARD_DEFAULT,  
 		    returnKeyType:	Ti.UI.RETURNKEY_DEFAULT,  
 		    borderStyle:	Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-		    borderColor: '#025F8B',
-		    borderWidth: 3,
-		    font: { fontSize: '20dp' }
+		    borderColor: template.form.input.border_color,
+		    borderWidth: template.form.input.border_width,
+		    font: { fontSize: template.form.input.font_size },
 		}); 
 		
 		self.password.addEventListener('focus', function(){
-			password.backgroundColor = '#fff';
-			password.color = '#333';
-			password.borderColor = '#025F8B'
+			self.password.backgroundColor = '#fff';
+			self.password.color = '#333';
+			self.password.borderColor = '#025F8B'
 		});
 		
 		self.password.addEventListener('blur', function(){
-			password.backgroundColor = '#025F8B';
-			password.color = '#fff';
-			password.borderColor = '#025F8B'
+			self.password.backgroundColor = '#025F8B';
+			self.password.color = '#fff';
+			self.password.borderColor = '#025F8B'
 		});
 		return self.password;	
 	}
@@ -150,8 +153,8 @@ var loginForm = (function(){
 		    top : 230,
 		    height : 50,
 		    left:'5%',  
-		    width: '90%', 
-		    color: '#333'
+		    width: template.form.checkbox.width, 
+		    color: template.form.checkbox.color
 		});
 		return self.keep;	
 	}
@@ -163,14 +166,14 @@ var loginForm = (function(){
 		
 		self.btn = Ti.UI.createButton({  
 		    title: text,  
-		    top:300, 
-		    left:'5%',  
-	    	width: '90%',   
-		    height:80,  
+		    top: template.form.button.top, 
+		    left: template.form.button.left,  
+	    	width: template.form.button.width,   
+		    height: template.form.button.height,  
 		    borderRadius:1, 
-		    backgroundColor: '#2292CE',
-		    color: '#fff',
-		    font: {fontFamily:'Tahoma',fontWeight:'bold',fontSize:'20dp'},
+		    backgroundColor: template.form.button.background_color,
+		    color: template.form.button.color,
+		    font: {},
 		    borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		    borderColor: '#2292CE',
 			    //borderWidth: 3
@@ -191,33 +194,9 @@ var loginForm = (function(){
 			//loginBtn.backgroundColor = '#025F8B';
 			//loginBtn.color = '#fff';
 			//loginBtn.borderColor = '#2292CE';
-			$htis.btn.animate(animation);
+			self.btn.animate(animation);
 		});
-		return $htis.btn;
-	}
-	
-	this.getDeleteBtn = function()
-	{
-		var deleteBtn = Ti.UI.createButton({  
-			    title:'remover credenciais',  
-			    top:250, 
-			    left:'5%',  
-		    	width: '90%',   
-			    height: 80,  
-			    borderRadius:1, 
-			    backgroundColor: '#8F1111',
-			    color: '#fff',
-			    font: {fontFamily:'Tahoma',fontWeight:'bold',fontSize:'20dp'},
-			    borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-			    borderColor: '#8F1111',
-			    borderWidth: 3
-		}); 
-		
-		deleteBtn.addEventListener('click', function(){
-			deleteUserCredentials();
-		});
-	
-		return deleteBtn;	
+		return self.btn;
 	}
 	
 	this.loginAction = function(loginInfo){
@@ -273,4 +252,5 @@ var loginForm = (function(){
 	}
 	
 	return this._init();
-})();
+};
+exports.LoginForm = LoginForm;

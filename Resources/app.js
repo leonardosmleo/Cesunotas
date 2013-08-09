@@ -12,31 +12,30 @@
 if (Ti.version < 1.8 ) {
 	alert('Sorry - this application template requires Titanium Mobile SDK 1.8 or later');	  	
 }
-
 /* Include global variables  */
 Ti.include('globals.js');
 /* Include app configuratios */
 Ti.include('config.js');
 /* Include app configuratios */
 Ti.include('functions.js');
-/* Include app tempalte */
-Ti.include('template.js');
+/* Android menu helper */
+Ti.include('android_menu.js');
 // This is a single context application with multiple windows in a stack
 (function() {
 
 	getActivityIndicator(); 
 	
 	Titanium.UI.setBackgroundColor( config.app.app_background_color );
-
+	
+	installDb();
+	
 	return getLoginWindow();
-
+	
 })();
 
 function getLoginWindow()
 {
 	var loginView = require('ui/common/login/form_view');
-	var db = installDb();
-	Ti.API.debug( isDbInstalled() );
 	return new loginView();
 }
 

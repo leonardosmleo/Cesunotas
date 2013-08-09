@@ -17,7 +17,6 @@ function installDb(){
 	if(file.exists()) {
 		var db = Ti.Database.install( config.db.file, config.db.file);
 		db.close();
-		//Ti.API.info('file exists');
 		return true;
 	} else {
 		Ti.API.error('db not installed, file not found.');
@@ -32,28 +31,7 @@ function isDbInstalled(){
 	return ( ( fname.size > 0 )? true : false );
 }
 
-function updateUserCredentilas(loginInfo){
-	var db = Ti.Database.open('squidtech.sqlite');
-	Ti.API.debug(db);
-	var results = db.execute('REPLACE INTO credentials ( ra, password ) VALUES("'+loginInfo.username+'","'+loginInfo.password+'")');
-	db.close();
-	return results;
-}
 
-function getStoredUserCredentioals(ra){
-	var db = Ti.Database.open('squidtech.sqlite');
-	var results = db.execute('SELECT * FROM credentials WHERE ra = "'+ra+'"');
-	db.close();
-	if( results.isValidRow() ){
-		return results;
-	}
-	return false;	
-}
-
-function userExists(){
-	var user = getStoredUserCredentioals( this.ra );
-	return ( user.rowCount > 0 )? true : false;
-}
 
 /*******************************************************************************************
  * Filesystem functions 
@@ -101,6 +79,7 @@ function var_dump(_var, _level) {
  */
 function getActivityIndicator()
 {
+	var_dump(config);
 	if( !config.modules.activityIndicator){
 		var style;
 		if (Ti.Platform.name === 'iPhone OS'){
