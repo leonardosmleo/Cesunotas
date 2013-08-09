@@ -31,7 +31,7 @@ function LoginForm(template){
 	
 		self.btn.addEventListener('touchend', function(){
 			//activityIndicator.show();
-			loginAction({username: username.value, password: password.value, keep: checkbox.value });
+			self.loginAction({username: self.ra.value, password: self.password.value, keep: self.keep.value });
 		});
 		
 		return self;
@@ -201,7 +201,7 @@ function LoginForm(template){
 	
 	this.loginAction = function(loginInfo){
 		var data = getDataFromDb(loginInfo.username);
-		Ti.API.debug(data);
+		//Ti.API.debug(data);
 		
 		Ti.API.debug(data);
 		//return false;
@@ -213,7 +213,7 @@ function LoginForm(template){
 		} 
 		
 		if( !isOlder ){
-			return getNotesWindow(data.json);
+			return self.getNotesWindow(data.json);
 		}
 		else {
 			var url = 'http://squidtech.layoutz.com.br/cesunotas_wbs/webservice.php';
@@ -229,12 +229,17 @@ function LoginForm(template){
 			         			responseText: this.responseText
 			         		});
 			         
-			         return getNotesWindow(this.responseText);
+			         return self.getNotesWindow(this.responseText);
 			     },
 			     // function called when an error occurs, including a timeout
 			     onerror : function(e) {
-			         //Ti.API.debug(e.error);
-			         return false;
+			         var alert = Ti.UI.createAlertDialog({
+			         	title: 'Erro',
+						message: 'Falha no tentativa de login !',
+						cancel: 1 
+					});
+					alert.show();
+			        return false;
 			     },
 			     timeout : 5000  // in milliseconds
 			 });

@@ -8,13 +8,9 @@ var user = false;
 var disciplins_names = [];
 function NotesList(notes)
 {
-	//Ti.API.debug(JSON.stringify(notes));
-	
 	notes = JSON.parse(notes);
 	user = notes['user'];
 	delete notes['user'];
-
-	//var tabGroup = Ti.UI.createTabGroup();
 
 	var notesListWindow = Ti.UI.createWindow({
 		title:'Cesunotas',
@@ -34,7 +30,8 @@ function NotesList(notes)
 	
 	notesListWindow.add( getFooterTemplate() );
 	
-	notesListWindow.add(activityIndicator);
+	//var activityIndicator = getActivityIndicator();
+	//notesListWindow.add( activityIndicator );
 	
 	notesListWindow.open();
 
@@ -474,7 +471,7 @@ function getDiciplinsItemsTemplate(){
 	            properties: {            // Sets the label properties
 	                color: '#666',
 	                font: { fontFamily:'Helvetica Neue', fontSize: '13dp' },
-	                left: '10dp', top: 15, width: width - 80
+	                left: '10dp', top: 15, width: Titanium.UI.SIZE - 80
 	            }
 	        }, 
 	        {                            // Subtitle
@@ -486,7 +483,7 @@ function getDiciplinsItemsTemplate(){
 	                top: '35dp',
 	                bottom: 15,
 	                color: '#025F8B',
-	                width: width - 60
+	                width: Titanium.UI.SIZE - 60
 	            }
 	        }
 	    ]
