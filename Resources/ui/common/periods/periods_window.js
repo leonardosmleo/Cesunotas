@@ -133,18 +133,20 @@ function PeriodsWindow( rows, discipline ){
 		});
 
 		var activity = getNewActivityIndicator();
-
-		webview_container.add( webview );
-		webview_container.add( activity );
+		activity.backgroundColor = '#eee';
 		
+		/*
 		webview.addEventListener('load', function(e){
 			Ti.App.fireEvent("web:data", {rows: self.getChartArray(), width: ( PixelsToDPUnits(getGlobal('device.width')) * 0.93), height: PixelsToDPUnits(135) });
 		});
-		
+		*/
 		Ti.App.addEventListener('web:activity', function(e){
 			activity.hide();
 		});
-		activity.backgroundColor = '#eee';
+		
+		//webview_container.add( webview );
+		webview_container.add( activity );
+		
 		activity.show();
 		
 		return webview_container;

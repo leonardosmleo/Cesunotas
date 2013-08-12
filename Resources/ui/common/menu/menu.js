@@ -65,7 +65,8 @@ function Menu(){
 		var icon = Ti.UI.createImageView({
 			image: item.icon,
 			top: '20%',
-			opacity: 0.6
+			opacity: 0.6,
+			height: '35dp'
 		});
 		
 		button.add(icon);

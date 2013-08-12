@@ -42,7 +42,7 @@ function LoginView()
 	scrollView.add( getLoginDescriptionLabel() );
 	loginWindow.add(scrollView);
 	loginWindow.add( getFooterTemplate() );
-	
+
 	Ti.include('/ui/common/login/android_menu.js');
 	android_menu.add(login_android_menu);
 
