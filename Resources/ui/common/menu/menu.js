@@ -15,6 +15,7 @@ function Menu(){
 		self.window.add( self.view );
 		self.window.add(getFooterTemplate());
 		self.window.open();
+		Ti.App.fireEvent('login:activity_indicator_hide',{});
 	}
 	
 	this.setItems = function(){

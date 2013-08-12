@@ -36,7 +36,7 @@ function LoginView()
 	
 	var form = require('forms/login');
 	scrollView.add( getLoginWindowLabel() );
-	var LoginForm = new form.LoginForm(template);
+	var LoginForm = new form(template);
 	
 	scrollView.add( LoginForm.getForm() );
 	scrollView.add( getLoginDescriptionLabel() );
@@ -46,9 +46,16 @@ function LoginView()
 	Ti.include('/ui/common/login/android_menu.js');
 	android_menu.add(login_android_menu);
 
-	var activityIndicator = getActivityIndicator();
+	var activityIndicator = getNewActivityIndicator();
 	loginWindow.add( activityIndicator );
-	
+
+	Ti.App.addEventListener('login:activity_indicator_show',function(e){
+		activityIndicator.show();
+	});
+	Ti.App.addEventListener('login:activity_indicator_hide',function(e){
+		activityIndicator.hide();
+	});
+
 	android_menu.render( loginWindow.activity );
 
 	loginWindow.open();

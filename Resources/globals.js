@@ -1,6 +1,7 @@
 Ti.App.globals = {
 	logged_user: false,
 	logged_user_ra: false,
+	logged_user_name: false,
 	filesystem: {
 		path: {
 			resources: Titanium.Filesystem.resourcesDirectory,

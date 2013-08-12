@@ -33,6 +33,11 @@ function NotesList(notes)
 	//var activityIndicator = getActivityIndicator();
 	//notesListWindow.add( activityIndicator );
 	
+	notesListWindow.addEventListener('androidback',function(e){
+		e.source.close();
+		notesListWindow = null;
+	});
+	
 	notesListWindow.open();
 
 	return notesListWindow;

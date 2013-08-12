@@ -19,18 +19,14 @@ function LoginForm(template){
 		self.getSubmitButton();
 		
 		self.user_exists = userExists(self.ra);
-		
-		Ti.API.debug((true !== self.user_exists)+' estamos aqui');
-		
+
 		if( false !== self.user_exists ){
 			self.ra.value = self.user_exists.fieldByName('ra');
 			self.password.value = self.user_exists.fieldByName('password');
 		}
-		
-		var activityIndicator = getActivityIndicator();
-	
+
 		self.btn.addEventListener('touchend', function(){
-			//activityIndicator.show();
+			Ti.App.fireEvent('login:activity_indicator_show',{});
 			self.loginAction({username: self.ra.value, password: self.password.value, keep: self.keep.value });
 		});
 		
@@ -49,7 +45,7 @@ function LoginForm(template){
 		    left: 0,
 		    width: Titanium.UI.SIZE, height: 450
 		});
-		if( !self.userExists ){
+		if( !self.user_exists ){
 			formView.add( self.ra );
 			formView.add( self.password ); 
 			formView.add( self.keep );
@@ -162,7 +158,7 @@ function LoginForm(template){
 	
 	this.getSubmitButton = function()
 	{
-		if( userExists ){ var text = 'Ver notas'; }
+		if( self.user_exists ){ var text = 'Ver notas'; }
 		else { var text = 'Enviar'; }
 		
 		self.btn = Ti.UI.createButton({  
@@ -193,9 +189,6 @@ function LoginForm(template){
 			    backgroundColor: '#025F8B'
 			    
 			});
-			//loginBtn.backgroundColor = '#025F8B';
-			//loginBtn.color = '#fff';
-			//loginBtn.borderColor = '#2292CE';
 			self.btn.animate(animation);
 		});
 		return self.btn;
@@ -213,10 +206,8 @@ function LoginForm(template){
 			var oneHour = 1000 * 60 * 60;
 			var isOlder = ((new Date().getTime() - oneHour) < lasttime) ? true: false;
 		} 
-		
-		
-		
-		if( !isOlder ){
+
+		if( self.user_exists && !isOlder ){
 			setGlobal('logged_user_ra',loginInfo.username);
 			return self.getMenuWindow(); //data.json
 		}
@@ -245,6 +236,7 @@ function LoginForm(template){
 						cancel: 1 
 					});
 					alert.show();
+					Ti.App.fireEvent('login:activity_indicator_hide',{});
 			        return false;
 			     },
 			     timeout : 5000  // in milliseconds
@@ -269,4 +261,4 @@ function LoginForm(template){
 	
 	return this._init();
 };
-exports.LoginForm = LoginForm;
+module.exports = LoginForm;

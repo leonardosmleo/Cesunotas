@@ -1,6 +1,6 @@
 var login_android_menu = function( menu )
 {	
-	if( config.debug.show_remove_credentials_btn ){
+	if( getGlobal('debug.show_remove_credentials_btn') ){
 	  	var menuItem = menu.add({ 
 	    	title: "remover credênciais", 
 	    	icon:  "/icons/light/light_x.png",
