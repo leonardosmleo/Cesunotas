@@ -24,15 +24,10 @@ Ti.include('android_menu.js');
 // This is a single context application with multiple windows in a stack
 (function() {
 
-	getActivityIndicator(); 
-	
-	Titanium.UI.setBackgroundColor( config.app.app_background_color );
+	Titanium.UI.setBackgroundColor( getGlobal('add.background_color') );
 	
 	installDb();
 
-	//var app = new App();
-	
-	//return getMenuWindow();
 	return getLoginWindow();
 	
 })();

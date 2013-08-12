@@ -2,6 +2,9 @@ Ti.App.globals = {
 	logged_user: false,
 	logged_user_ra: false,
 	logged_user_name: false,
+	app:{
+		background_color: '#fff'
+	},
 	filesystem: {
 		path: {
 			resources: Titanium.Filesystem.resourcesDirectory,

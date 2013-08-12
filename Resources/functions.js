@@ -13,9 +13,10 @@ function isOs( osname ){
  * Database functions 
  */
 function installDb(){
-	var file = getFile( config.db.file );
+	var filename = getGlobal( 'db.file' );
+	var file = getFile( filename );
 	if(file.exists()) {
-		var db = Ti.Database.install( config.db.file, config.db.file);
+		var db = Ti.Database.install( filename, filename );
 		db.close();
 		return true;
 	} else {
