@@ -45,16 +45,12 @@ function LoginView()
 	
 	Ti.include('/ui/common/login/android_menu.js');
 	android_menu.add(login_android_menu);
-	
-	//Ti.API.debug(var_dump(android_menu));
-	
+
 	var activityIndicator = getActivityIndicator();
 	loginWindow.add( activityIndicator );
 	
 	android_menu.render( loginWindow.activity );
-	
-	//Ti.API.debug(config);
-	
+
 	loginWindow.open();
 	
 	return loginWindow;

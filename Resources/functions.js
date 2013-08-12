@@ -79,7 +79,6 @@ function var_dump(_var, _level) {
  */
 function getActivityIndicator()
 {
-	var_dump(config);
 	if( !config.modules.activityIndicator){
 		var style;
 		if (Ti.Platform.name === 'iPhone OS'){
@@ -104,21 +103,99 @@ function getActivityIndicator()
 	return config.modules.activityIndicator;
 }
 
+function getNewActivityIndicator(){
+	var style;
+	if (Ti.Platform.name === 'iPhone OS'){
+	  	style = Ti.UI.iPhone.ActivityIndicatorStyle.PLAIN;
+	} else {
+	  	style = Ti.UI.ActivityIndicatorStyle.PLAIN;
+	}
+	return Ti.UI.createActivityIndicator({
+		  	color: '#015F8B',
+		  	font: {fontFamily:'Helvetica Neue', fontSize:'20dp', fontWeight:'bold'},
+		  	message: 'Carregando...',
+		  	style:style,
+		  	opacity: 0.7,
+		  	//top: 0, //(( width / 2 ) - ( Ti.UI.SIZE / 2 )),
+		  	//left: 0, //(( height / 2 ) - ( Ti.UI.SIZE / 2 )),
+		  	height: '100%',
+		  	width: '100%',
+		  	backgroundColor: '#fff'
+		});
+}
+
 /**************************************************************************************
  * Basic Layout 
  */
+function getHeaderLayout(user, title){
+	if( !title ){
+		title = 'Disciplinas';
+	}
+	var disciplinsLabelContainer = Ti.UI.createView({
+		top: 0,
+	    backgroundColor: '#EEEEEE',
+	    width: '100%', height: '60dp'
+	});
+
+	var disciplinsLabel = Ti.UI.createLabel({
+	    color: '#404E57',
+	    font: { fontSize:'13dp',fontFamily:'Helvetica Neue' },
+	    shadowColor: '#000',
+	    shadowOffset: {x:5, y:5},
+	    text: user,
+	    textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+	    top: '5dp',
+	    left: '10dp'
+	});
+	
+	var headerLogo = Ti.UI.createImageView({
+		image: '/images/logo.png',
+		height: '15dp',
+		right: '10dp',
+		top: '10dp'
+	});
+	
+	var disciplinsSectionLabelContainer = Ti.UI.createView({
+		top: '40dp',
+	    backgroundColor: '#404E57',
+	    width: '100%', height: '20dp'
+	});
+	
+	var disciplinsSectionLabel = Ti.UI.createLabel({
+	    color: '#fff',
+	    font: { fontSize:'13dp',fontFamily:'Helvetica Neue' },
+	    backgroundColor: '#404E57',
+	    shadowColor: '#000',
+	    shadowOffset: {x:5, y:5},
+	    text: title,
+	    textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+	    top: 0,
+	    left: '10dp',
+	    bottom: 0
+	});
+	
+	disciplinsLabelContainer.add(disciplinsLabel);
+	disciplinsLabelContainer.add(headerLogo);
+	
+	disciplinsSectionLabelContainer.add(disciplinsSectionLabel)
+	disciplinsLabelContainer.add(disciplinsSectionLabelContainer);
+	
+	
+	return disciplinsLabelContainer;
+}
+
 function getFooterTemplate(){
 	var footer = Ti.UI.createView({
 		bottom: 0,
 	    left: 0,
 	    backgroundColor: '#404E57',
-	    width: '100%', height: 50
+	    width: '100%', height: '30dp'
 	});
 	var footerImg = Ti.UI.createImageView({
 		image: '/images/logo_squidtech.png',
-		height: 35,
-		right: 15,
-		top: 10
+		height: '20dp',
+		right: '10dp',
+		top: '5dp'
 	});
 	footer.add(footerImg);
 	return footer;
@@ -128,6 +205,84 @@ function getFooterTemplate(){
 
 
 
+
+
+
+/**************************************************************************************
+ * String functions 
+ */
+function abreviateName(str){
+	var namesToAbreviate = [
+		'ADMINISTRAÇÃO','PLANEJAMENTO','SUPERVISIONADO','PROFISSIONAL','SOCIOCULTURAL','SEMINÁRIOS','PREVIDÊNCIA','PESQUISA','TÉCNICAS'
+	];
+	var abreviations = [
+		'ADM.','PLAN.','SUPERV.','PROF.','SOCIOC.','SEM.','PREV.','PESQ.','TÉCN.'
+	];
+	for(var i=0; i< namesToAbreviate.length; i++){
+		//Ti.API.debug(str);
+		//Ti.API.debug(namesToAbreviate[i]);
+		//Ti.API.debug(str.search( namesToAbreviate[i] ));
+		if( str.search( namesToAbreviate[i] ) > -1){
+			str = str.replace(namesToAbreviate[i],abreviations[i]);
+		}
+	}
+	return ucFirstAllWords( str.replace(/^s+|s+$/g,"") );
+	//return str.replace(/^s+|s+$/g,"");
+}
+function ucFirstAllWords( str )
+{
+    var pieces = str.split(" ");
+    for ( var i = 0; i < pieces.length; i++ )
+    {
+    	pieces[i] = pieces[i].toLowerCase();
+        var j = pieces[i].charAt(0).toUpperCase();
+        pieces[i] = j + pieces[i].substr(1);
+    }
+    return pieces.join(" ");
+}
+
+
+
+
+/**************************************************************************************
+ * System functions 
+ */
+function getPage( name, path, args){
+	if( !args ){ args = null; }
+	var page = require(path);
+	return new page(args);
+}
+function logDebug( msg, dump ){
+	if( !dump ){
+		return Ti.API.debug(msg);
+	} else {
+		return Ti.API.debug(var_dump(msg));
+	}
+}
+function logInfo(msg){
+	return Ti.API.debug(msg);
+}
+function logError(msg){
+	return Ti.API.debug(msg);
+}
+function mergeObjects(o1, o2) {
+  if (o1 == null || o2 == null)
+    return o1;
+
+  for (var key in o2)
+    if (o2.hasOwnProperty(key))
+      o1[key] = o2[key];
+
+  return o1;
+}
+function PixelsToDPUnits(px){
+  return ( parseInt(px) / (Titanium.Platform.displayCaps.dpi / 160));
+}
+	 
+	 
+function DPUnitsToPixels(dp){
+  return ( parseInt(dp) * (Titanium.Platform.displayCaps.dpi / 160));
+}
 
 
 

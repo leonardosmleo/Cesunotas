@@ -20,6 +20,7 @@ Ti.include('config.js');
 Ti.include('functions.js');
 /* Android menu helper */
 Ti.include('android_menu.js');
+
 // This is a single context application with multiple windows in a stack
 (function() {
 
@@ -28,17 +29,15 @@ Ti.include('android_menu.js');
 	Titanium.UI.setBackgroundColor( config.app.app_background_color );
 	
 	installDb();
+
+	//var app = new App();
 	
+	//return getMenuWindow();
 	return getLoginWindow();
 	
 })();
 
-function getLoginWindow()
-{
-	var loginView = require('ui/common/login/form_view');
-	return new loginView();
-}
 
-function getTemplate(){
-	
+function getLoginWindow(){
+	return getPage( 'loginView', 'ui/common/login/form_view');
 }

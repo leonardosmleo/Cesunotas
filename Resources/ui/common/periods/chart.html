@@ -1,0 +1,47 @@
+<html >
+<head >
+<!--Load the AJAX API-->
+<script type="text/javascript" src="../../../js/google.jsapi.js"></script>
+    <script type="text/javascript ">	
+	  var options = {
+	          //title: 'Grafico de notas por periodo',
+	          chartArea: { left:10, top:10 },
+	          titlePosition: 'in', axisTitlesPosition: 'in',
+	          fontSize: '9px',
+	          backgroundColor: '#eeeeee',
+	          legend: { position: 'in', textStyle: {color: '#fff', fontName: 'Arial', fontSize: '8px' } },
+	          hAxis: {textPosition: 'out', baselineColor: "#fff",textStyle: {color: '#404E57', fontName: 'Arial', fontSize: '8px' }, gridlines: { color: '#efefef', fontSize: '5px' } },
+	          vAxis: {textPosition: 'in', baselineColor: "#fff",textStyle: {color: '#404E57', fontName: 'Arial', fontSize: '8px' }, gridlines: { color: '#efefef', fontSize: '5px' } },
+	          series: [{color: '#025F8B', visibleInLegend: false,lineWidth: 4}]
+	       }; 
+      var chart;
+
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table, 
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {			
+        	chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      }
+
+      Ti.App.addEventListener("web:data", function(event) {
+	    	options.chartArea.width = parseInt(event.width); 
+      		options.chartArea.height = parseInt(event.height);
+      		var data = google.visualization.arrayToDataTable(event.rows);   	
+      		chart.draw(data, options);
+      		Ti.App.fireEvent("web:activity",{});
+	  });
+      
+    </script>
+  </head>
+
+  <body style="margin: 0; padding: 0;">
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div"></div>
+  </body>
+</html>

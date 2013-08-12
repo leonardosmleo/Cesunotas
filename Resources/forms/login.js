@@ -96,15 +96,15 @@ function LoginForm(template){
 		}); 
 	
 		self.ra.addEventListener('focus', function(){
-			self.ra.backgroundColor = '#fff';
-			self.ra.color = '#333';
-			self.ra.borderColor = '#025F8B'
+			self.ra.backgroundColor = template.form.input.active.background_color;
+			self.ra.color = template.form.input.active.color;
+			self.ra.borderColor = template.form.input.active.border_color;
 		});
 		
 		self.ra.addEventListener('blur', function(){
-			self.ra.backgroundColor = '#025F8B';
-			self.ra.color = '#fff';
-			self.ra.borderColor = '#025F8B'
+			self.ra.backgroundColor = template.form.input.background_color;
+			self.ra.color = template.form.input.color;
+			self.ra.borderColor = template.form.input.border_color
 		});
 		
 		return self.ra;	
@@ -131,16 +131,17 @@ function LoginForm(template){
 		}); 
 		
 		self.password.addEventListener('focus', function(){
-			self.password.backgroundColor = '#fff';
-			self.password.color = '#333';
-			self.password.borderColor = '#025F8B'
+			self.password.backgroundColor = template.form.input.active.background_color;
+			self.password.color = template.form.input.active.color;
+			self.password.borderColor = template.form.input.active.border_color;
 		});
 		
 		self.password.addEventListener('blur', function(){
-			self.password.backgroundColor = '#025F8B';
-			self.password.color = '#fff';
-			self.password.borderColor = '#025F8B'
+			self.password.backgroundColor = template.form.input.background_color;
+			self.password.color = template.form.input.color;
+			self.password.borderColor = template.form.input.border_color
 		});
+		
 		return self.password;	
 	}
 	
@@ -174,6 +175,7 @@ function LoginForm(template){
 		    backgroundColor: template.form.button.background_color,
 		    color: template.form.button.color,
 		    font: {},
+		    textAlign: Ti.UI.TEXT_ALIGNMENT_RIGHT,
 		    borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		    borderColor: '#2292CE',
 			    //borderWidth: 3
@@ -185,7 +187,7 @@ function LoginForm(template){
 		  	matrix = matrix.scale(.9, .9);
 			var animation = Ti.UI.createAnimation({
 				transform : matrix,
-			    duration : 200,
+			    duration : 100,
 			    autoreverse : true,
 			    repeat : 1,
 			    backgroundColor: '#025F8B'
@@ -203,7 +205,7 @@ function LoginForm(template){
 		var data = getDataFromDb(loginInfo.username);
 		//Ti.API.debug(data);
 		
-		Ti.API.debug(data);
+		//Ti.API.debug(data);
 		//return false;
 		var isOlder = true;
 		if( false !== data ){
@@ -212,15 +214,18 @@ function LoginForm(template){
 			var isOlder = ((new Date().getTime() - oneHour) < lasttime) ? true: false;
 		} 
 		
+		
+		
 		if( !isOlder ){
-			return self.getNotesWindow(data.json);
+			setGlobal('logged_user_ra',loginInfo.username);
+			return self.getMenuWindow(); //data.json
 		}
 		else {
 			var url = 'http://squidtech.layoutz.com.br/cesunotas_wbs/webservice.php';
 		 	var client = Ti.Network.createHTTPClient({
 			     // function called when the response data is available
 			     onload : function(e) {
-			         Ti.API.debug(loginInfo.keep);
+			         //Ti.API.debug(loginInfo.keep);
 			         if( loginInfo.keep ){
 			         	updateUserCredentilas(loginInfo);
 			         }	         
@@ -228,8 +233,9 @@ function LoginForm(template){
 			         			user: loginInfo.username,
 			         			responseText: this.responseText
 			         		});
-			         
-			         return self.getNotesWindow(this.responseText);
+			         setGlobal('logged_user_ra',loginInfo.username);
+			         //return self.getNotesWindow(this.responseText);
+			         return self.getMenuWindow();
 			     },
 			     // function called when an error occurs, including a timeout
 			     onerror : function(e) {
@@ -250,10 +256,15 @@ function LoginForm(template){
 		}
 	}
 	
+	this.getMenuWindow = function(){
+		return getPage( 'Menu', '/ui/common/menu/menu');
+	}
+	
 	this.getNotesWindow = function(notes)
 	{
-		var NotesList = require('/ui/common/disciplines/list_view');
-		return new NotesList( notes );
+		return getPage( 'NotesList', '/ui/common/disciplines/list_view', notes );
+		//var NotesList = require('/ui/common/disciplines/list_view');
+		//return new NotesList( notes );
 	}
 	
 	return this._init();

@@ -19,12 +19,17 @@ var template = {
 			height: '60dp',
 			width: '90%',
 			textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
-			background_color: "#025F8B",
-			border_color: '#025F8B',
+			background_color: "#404E57",
+			border_color: '#404E57',
 			border_width: 3,
 			font_size: '20dp',
-			font_weigth: 'bold',
-			color: '#fff'
+			font_weigth: 'normal',
+			color: '#fff',
+			active: {
+				background_color: '#fff',
+				color: '#025F8B',
+				border_color: '#025F8B'
+			}
 		},
 		checkbox: {
 		    width: '90%', 
@@ -35,7 +40,7 @@ var template = {
 			left: '5%',
 			width: '90%',
 			height: '60dp',
-			background_color: '#2292CE',
+			background_color: '#025F8B',
 			color: '#fff'
 		}
 	}
