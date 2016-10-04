@@ -43,7 +43,6 @@ function deleteUserCredentials(){
 	var alert = Ti.UI.createAlertDialog({ 
 			cancel: 1 
 		});
-	
 	if( db.rowsAffected > 0 ){
 		deleteDataInDb();
 		alert.title = 'Sucesso';
