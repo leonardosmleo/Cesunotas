@@ -31,7 +31,6 @@ Ti.include('android_menu.js');
 	installDb();
 	
 	return getLoginWindow();
-	
 })();
 
 
